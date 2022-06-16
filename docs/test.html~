@@ -1,0 +1,62 @@
+<html>
+
+<title>nearBragg demonstration of Bragg's Law</title>
+
+<h1>nearBragg demonstration of Bragg's Law</h1>
+
+
+Bragg's Law is not a Fourier transform.
+<p>
+Remember, in the standard diagram of Bragg's Law:<br>
+<a href=Bragg.png><img src=Bragg_tmb.png></a>
+<p>
+there are only two atoms that are &quot;d&quot; apart.  However, the full diffraction pattern from just two atoms actually looks like this:<br>
+<a href=intimage_twoatom.png><img src=intimage_twoatom_tmb.png></a><br>
+<p>
+If you download the <a href=intimage_twoatom.img>&quot;ADSC format&quot; image</a> you can look at it in your favorite diffraction image viewer, such as 
+<a href=http://www.scripps.edu/~arvai/adxv.html>ADXV</a>,
+<a href=http://www.mrc-lmb.cam.ac.uk/harry/imosflm/ver105/>imosflm</a>, 
+<a href=http://www.hkl-xray.com/>HKL2000</a>,
+<a href=http://xds-viewer.sourceforge.net/>XDSviewer</a>,
+<a href=http://www.scripps.edu/~arvai/adxv.html>ipdisp</a>,
+<a href=http://www.esrf.eu/computing/scientific/FIT2D/>fit2d</a>, 
+whatever you like.  Note: you can substitute &quot;img&quot; for any of the &quot;png&quot; filenames linked from this page and download the img file.
+<p>
+ Notice how there are 9 bands for only 2 atoms?  If you look at the <a href=intimage_twoatom.img>*.img file</a> you can see that the &quot;d spacing&quot; of the middle of each line is indeed 10 A, 5A, 3.33A, and 2.5A.  Just as Bragg's Law predicts for n=1,2,3,4 because the two atoms were 10 A apart (&quot;d&quot; = 10 A) and the wavelength was 1 A.  
+<p>
+But what about the corners?  The 2.5 A band reads a &quot;d-spacing&quot; of 1.65 A at the corners of the detector!  Also, if you look at the central band, it passes through the direct beam (&quot;d&quot;=infinity), but at the edge of the detector this same band reads 2.14 A!   Does this mean that Bragg's Law is wrong!?
+<p>
+Of course not, it just means that Bragg's Law is one dimensional. Strictly speaking, it is about &quot;planes&quot; of atoms, not individual atoms themselves.  The Fourier transform of two dots is indeed a series of bands (an &quot;interference pattern&quot;), but the Fourier transform of two planes (edge-on to the beam) is this:<br>
+<a href=20A_disks.png><img src=20A_disks_tmb.png></a><p>
+
+What?  A caterpillar?  How does that happen?  Well, it helps to look at the diffraction pattern of a single plane:
+<br><a href=20A_disk.png><img src=20A_disk_tmb.png></a><p>
+
+ I should point out here that I'm not modelling an infinite plane, but rather a disk 20A in radius.  This is why the edge of the caterpillar has a &quot;d-spacing&quot; of 40 A in the <a href=20A_disk.img>*.img file</a>.  If it were an infinite plane, its Fourier transform would be an infinitely thin line, visible at only one point: the origin.  Which is not all that interesting. The &quot;halo&quot; around the main line is because the plane has a &quot;hard&quot; edge, and so its Fourier transform has &quot;fringes&quot; (its a &quot;sinc&quot; function).  The reason why it does not run from the top of the image to the bottom is because the Ewald sphere (a geometric representation of Bragg's law) is curved, but the Fourier transform of a disk is a straight line in reciprocal space.
+<p>
+  By giving the plane a finite size you can more easily see that the diffraction pattern of a stack of two planes is nothing more than the diffraction pattern of one plane, multiplied by that of two points.  This is a fundamental property of Fourier transforms: convolution becomes a product in reciprocal space.  Where &quot;convolution&quot; is nothing more than &quot;copying&quot; an object to different places in space, and in this case these &quot;places&quot; are the two points in the Bragg diagram.
+<p>
+But, still, why the caterpillar?  It is because the Ewald sphere is curved, so the reciprocal-space &quot;line&quot; only brushes against it for a few orders.  We can, however, get more orders by tilting the planes by some angle &quot;theta&quot;, such as the 11.53 degrees that satisfies n*lambda = 2*d*sin(theta) for n = 4.  That is this image:
+<br><a href=tilted_20A_disks.png><img src=tilted_20A_disks_tmb.png></a><p>
+
+Yes, you can still see the caterpillar, but in the <a href=tilted_20A_disks.img>*.img file</a> clearly the 4th &quot;spot&quot; up is brighter than all but the 0th-order one.  The only reason why it is not identical in intensity is because of the inverse square law: the pixels on the detector for the 4th-order &quot;reflection&quot; are a little further away from the &quot;sample&quot; than the zeroeth-order ones.
+<p>
+ As the planes get wider:
+<br><a href=tilted_20A_disks.png><img src=tilted_20A_disks_tmb.png></a>
+<a href=tilted_40A_disks.png><img src=tilted_40A_disks_tmb.png></a>
+<a href=tilted_80A_disks.png><img src=tilted_80A_disks_tmb.png></a>
+<a href=tilted_160A_disks.png><img src=tilted_160A_disks_tmb.png></a><p>
+the &quot;caterpillar&quot; gets thinner you see less and less of the n=1,2,3 orders.  For an infinite pair of planes, there will be only two intersection points: the origin and the n=4 spot.  This is not because the intermediate orders are not there, they are just not satisfying the &quot;Bragg condition&quot;, and neither are their &quot;fringes&quot;.
+<p>
+Of course, with only two planes, even the infinite-plane spot will be much &quot;fatter&quot; in the vertical.  Formally, about half as &quot;fat&quot; as the distance between the spots.  This is because the interference pattern for only two points is still there.  But if you have three, four or five planes, you get these:
+<br><a href=tilted_20A_disk.png><img src=tilted_20A_disk_tmb.png></a>
+<a href=tilted_20A_disks.png><img src=tilted_20A_disks_tmb.png></a>
+<a href=tilted_20A_3disks.png><img src=tilted_20A_3disks_tmb.png></a>
+<a href=tilted_20A_4disks.png><img src=tilted_20A_4disks_tmb.png></a>
+<a href=tilted_20A_5disks.png><img src=tilted_20A_5disks_tmb.png></a><p>
+
+Where you can see the &quot;subsidiary maxima&quot; in between the &quot;Bragg peaks&quot;.  There has been some excitement about these of late for phasing XFEL images, and they only show up for crystals that are relatively few unit cells wide.  That is, the number of subsidiary maxima is proportional to the number of planes (stacks of unit cells), but their intensity fades relative to the Bragg peaks with the square of the number of planes, which you can confirm with the <a href=tilted_20A_5disks.img>&quot;img&quot; files</a> and a diffraction image viewer.
+<p>
+How does all this relate to structure factors?  Well, actually, it doesn't.  Everywhere on all of these images the structure factor has an amplitude of one and a phase of zero.  This is because there is only one electron in the &quot;unit cell&quot; here, and all the fancy shapes are actually due to the &quot;lattice&quot;.  If we want to talk about a &quot;unit cell&quot; with two atoms in it, then there are two, overlapping lattices, and they interfere with each other in the usual &quot;convolution becomes a product&quot; way.  That is, you can calculate the diffraction pattern for two points, and then multiply that diffraction pattern by that of the &quot;lattice&quot; with only one electron per unit cell.  In this way, you can build up anything you want, but Bragg's genius was in simplifying all this to a little rule which tells you how much to turn the crystal to see a given spot.  We sort of take this for granted now that we have automated diffractometers that do all the math for us, but in 1914 realizing that the rules or ordinary optics could be applied to x-rays and crystals was a pretty important step forward.
+
+</html>

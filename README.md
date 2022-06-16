@@ -169,7 +169,7 @@ cat >! silicon_nanoparticle.txt
 Twirl it around
 
 ```bash
-./<a href=rotate.awk>rotate.awk</a> -v phix=10 -v phiy=20 -v phiz=30 silicon_nanoparticle.txt >! rotated_xtal.txt
+./rotate.awk -v phix=10 -v phiy=20 -v phiz=30 silicon_nanoparticle.txt >! rotated_xtal.txt
 ```
 
 Jiggle the atoms by a B factor of 5
