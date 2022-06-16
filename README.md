@@ -197,7 +197,7 @@ adxv intimage_round.img
 
 ## Other examples:
 
-1. <a href=BraggsLaw/>Demonstration of Bragg's Law</a></br>
+1. [Demonstration of Bragg's Law](braggs_law.md)
 2. <a href=collision/>Deminstration of coherence length</a></br>
 
 
