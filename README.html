@@ -1,0 +1,252 @@
+<html>
+
+<title>nearBragg</title>
+
+<h1>nearBragg</h1>
+<p>
+<h2>program for assumption-free calculation of total scattering</h2>
+<p>
+<img src=nearBragg.png><p>
+<hr>
+The nearBragg program is a very simplistic yet general calculation of the total scattering from a bunch of "atoms"
+which the user provides as a 3-column text file of x-y-z coordinates in Angstroms.  Each atom is considered to be 
+a point with a structure factor of 1.0 (a single "electron").  The detector is represented as an array of pixels
+some distance away from the "crystal" (in mm), and the "source" is one or more points arranged in space.  These
+all have sensible defaults.  Scattering is calculated by computing the linear distance from each point in the source
+to each of the user-provided "atoms", and then on to the center of each pixel in the detector.  The sin and cos
+of 2pi times the number of wavelenghs involved in this total distance is then added up and the amplitude and phase of the 
+resultant wave from the whole sample
+(and the whole source) are obtained for each pixel.  The intensity at each pixel is the square of the amplitude.<br>
+No assumptions are made about Bragg's Law, unit cells, shape transforms, or any of that.  It is simply a calculation
+of the scattering from the user-provided points.
+<hr>
+source code: <a href =nearBragg.c>nearBragg.c</a> (20K) (pre-compiled binaries: 
+ <a href=nearBragg.Linux>linux</a>,
+ <a href=nearBragg.Darwin>OSX</a>,
+ <a href=nearBragg.Cygwin>Cygwin</a>,
+ <a href=nearBragg.exe>Windows</a>
+<hr>
+auxillary programs <a href =/~jamesh/bin_stuff/float_add.html>float_add</a> and 
+<a href =/~jamesh/bin_stuff/float_func.html>float_func</a> may be used to
+add up the raw "float" binary files output by nearBragg so that renderings may be divided up on separate CPUs and then
+combined together.  The resulting raw files may be converted to images with nearBragg using the -accumulate option (below)<br>
+also, the <a href =phase_color.c>phase_color.c</a> program will convert the sinimage and cosimage files output by nearBragg
+into a pretty color-by-phase image. However, if you want to display the phase of the traditional "structure factor", then you
+need to divide the wave scattered by your structure by the sinimage and cosimage produced for a single point electron at the
+origin using the same camera parameters.  This <a href =complex_divide.csh>complex_divide.csh</a> script may be helpful for this.
+<hr>
+<p>
+<h3>example usage:</h3>
+<p>
+compile it
+<pre>gcc -O -O -o <a href=nearBragg>nearBragg</a> <a href=nearBragg.c>nearBragg.c</a> -lm -static</pre>
+
+
+one atom case
+<pre>echo "0 0 0" >! atoms.txt</pre>
+
+run the simulation
+<pre>./<a href=nearBragg>nearBragg</a> -file ./atoms.txt -lambda 1.0</pre>
+
+view the result
+<pre><a href=http://www.scripps.edu/~arvai/adxv.html>adxv</a> <a href=intimage_oneatom.img>intimage.img</a></pre>
+
+convert and re-scale as regular graphics file
+<pre>
+<a href=http://www.imagemagick.org/>convert</a> -depth 16 -type Grayscale -colorspace GRAY -endian LSB -size 1024x1024+512 \
+  -negate -normalize \
+  GRAY:intimage.img <a href=intimage_oneatom.png>intimage.png
+<img src=intimage_oneatom_tmb.png></a>
+
+</pre>
+
+
+<hr>
+two atom case
+<pre>
+cat << EOF >! atoms.txt
+0 0 0
+0 10 0
+EOF
+</pre>
+
+run the simulation
+<pre>./<a href=nearBragg>nearBragg</a> -file ./atoms.txt -lambda 1.0
+</pre>
+
+view the result
+<pre><a href=http://www.scripps.edu/~arvai/adxv.html>adxv</a> <a href=intimage_twoatom.img>intimage.img</a>
+</pre>
+
+convert and re-scale as regular graphics file
+<pre>
+<a href=http://www.imagemagick.org/>convert</a> -depth 16 -type Grayscale -colorspace GRAY -endian LSB -size 1024x1024+512 \
+  -negate -normalize \
+  GRAY:intimage.img <a href=intimage_twoatom.png>intimage.png
+<img src=intimage_twoatom_tmb.png>
+</a>
+</pre>
+<hr>
+
+
+make a 11x11x11 cube grid with the cell spacing of silicon
+<pre>echo "5 5.43071" | ./<a href=makelattice.awk>makelattice.awk</a> >! <a href=silicon_nanoparticle.txt>silicon_nanoparticle.txt</a>
+</pre>
+
+twirl it around
+<pre>
+./<a href=rotate.awk>rotate.awk</a> -v phix=10 -v phiy=20 -v phiz=30 <a href=silicon_nanoparticle.txt>silicon_nanoparticle.txt</a> >! <a href=rotated_xtal.txt>rotated_xtal.txt</a>
+</pre>
+
+jiggle the atoms by a B factor of 5
+<pre>
+awk '{print $0,5}' rotated_xtal.txt | ./<a href=Bscatter.awk>Bscatter.awk</a> >! atoms.txt
+</pre>
+
+do a fast calculation with a "perfect" beam
+<pre>
+./<a href=nearBragg>nearBragg</a> -file ./atoms.txt -lambda 1.0 -dispersion 0 \
+   -hdivrange 0.0 -vdivrange 0.0 \
+ -intfile intimage_ideal.img -floatfile floatimage_ideal.bin
+</pre>
+
+view the result
+<pre>
+<a href=http://www.scripps.edu/~arvai/adxv.html>adxv</a> <a href=intimage_ideal.img>intimage_ideal.img</a>
+</pre>
+<a href=intimage_ideal.png><img src=intimage_ideal_tmb.png></a><p>
+
+add some divergence and dispersion
+<pre>
+./<a href=nearBragg>nearBragg</a> -file ./atoms.txt -lambda 1.0 -dispersion 0.1 \
+   -hdivrange 0.062 -vdivrange 0.062 -hdivstep 0.031 -vdivstep 0.031 \
+ -intfile intimage_realistic.img -floatfile floatimage_realistic.bin
+</pre>
+
+view the result
+<pre>
+<a href=http://www.scripps.edu/~arvai/adxv.html>adxv</a> intimage_realistic.img
+<a href=intimage_realistic.png><img src=intimage_realistic_tmb.png></a><p>
+</pre>
+
+
+
+
+
+
+
+<hr>
+same number of atoms, but a round particle
+<pre>
+echo "10 5.43071" | ./<a href=makelattice.awk>makelattice.awk</a> |\
+awk '{R=sqrt($1*$1+$2*$2+$3*$3)} R<37.625{print}' |\
+cat >! silicon_nanoparticle.txt
+</pre>
+
+twirl it around
+<pre>
+./<a href=rotate.awk>rotate.awk</a> -v phix=10 -v phiy=20 -v phiz=30 silicon_nanoparticle.txt >! rotated_xtal.txt
+</pre>
+
+jiggle the atoms by a B factor of 5
+<pre>
+awk '{print $0,5}' rotated_xtal.txt | ./<a href=Bscatter.awk>Bscatter.awk</a> >! atoms.txt
+</pre>
+
+do a fast calculation with a "perfect" beam
+<pre>
+./<a href=nearBragg>nearBragg</a> -file ./atoms.txt -lambda 1.0 -dispersion 0 \
+   -hdivrange 0.0 -vdivrange 0.0 \
+ -intfile intimage_round.img -floatfile floatimage_ideal.bin
+</pre>
+
+view the result
+<pre>
+<a href=http://www.scripps.edu/~arvai/adxv.html>adxv</a> <a href=intimage_round.img>intimage_round.img</a>
+</pre>
+<a href=intimage_round.png><img src=intimage_round_tmb.png></a><p>
+
+<h3>
+Other examples:
+</h3>
+1. <a href=BraggsLaw/>Demonstration of Bragg's Law</a></br>
+2. <a href=collision/>Deminstration of coherence length</a></br>
+
+<hr>
+Command-line options:<br>
+<dl>
+<dt> -atom <dt>
+<dd> number of atoms in the following file <dd>
+<dt> -file filename.txt <dt>
+<dd> text file containing point scatterer coordinates in Angstrom relative to the origin.  The x axis is the x-ray beam and Y and Z are parallel to the detector Y and X coordinates, respectively <dd>
+<dt> -hdivrange <dt>
+<dd> horizontal angular spread of source points (mrad). Default: 0 <dd>
+<dt> -vdivrange <dt>
+<dd> vertical angular spread of source points (mrad). Default: 0 <dd>
+<dt> -hdivstep <dt>
+<dd> number of source points in the horizontal. Default: 1 <dd>
+<dt> -vdivstep <dt>
+<dd> number of source points in the vertical. Default: 1 <dd>
+<dt> -distance <dt>
+<dd> distance from origin to detector center (mm) <dd>
+<dt> -source_distance <dt>
+<dd> distance from origin to source (mm) <dd>
+<dt> -source_depth <dt>
+<dd> distance from front of source to back (mm) <dd>
+<dt> -depthstep <dt>
+<dd> number of source points along path to sample. Default: 1 <dd>
+<dt> -detsize <dt>
+<dd> detector size in x and y (mm) <dd>
+<dt> -detsize_x <dt>
+<dd> detector size in x direction (mm) <dd>
+<dt> -detsize_y <dt>
+<dd> detector size in y direction (mm) <dd>
+<dt> -pixel <dt>
+<dd> detector pixel size (mm) <dd>
+<dt> -detpixels <dt>
+<dd> detector size in x and y (pixels) <dd>
+<dt> -detpixels_x <dt>
+<dd> detector size in x direction (pixels) <dd>
+<dt> -detpixels_y <dt>
+<dd> detector size in y direction (pixels) <dd>
+<dt> -Xbeam <dt>
+<dd> direct beam position in x direction (mm) Default: center <dd>
+<dt> -Ybeam <dt>
+<dd> direct beam position in y direction (mm) Default: center <dd>
+<dt> -curved_det <dt>
+<dd> all detector pixels same distance from sample (origin) <dd>
+<dt> -oversample <dt>
+<dd> number of sub-pixels per pixel. Default: 1 <dd>
+<dt> -roi xmin xmax ymin ymax <dt>
+<dd> only render pixels within a set range. Default: all detector <dd>
+<dt> -lambda <dt>
+<dd> incident x-ray wavelength (Angstrom). Default: 1 <dd>
+<dt> -dispersion <dt>
+<dd> spectral dispersion: delta-lambda/lambda (percent). Default: 0 <dd>
+<dt> -dispsteps <dt>
+<dd> number of wavelengths in above range. Default: 1 <dd>
+<dt> -floatfile <dt>
+<dd> name of binary pixel intensity output file (4-byte floats) <dd>
+<dt> -sinfile <dt>
+<dd> name of binary imaginary structure factor output file (4-byte floats) <dd>
+<dt> -cosfile <dt>
+<dd> name of binary real structure factor output file (4-byte floats) <dd>
+<dt> -intfile <dt>
+<dd> name of smv-formatted output file. <dd>
+<dt> -scale <dt>
+<dd> scale factor for intfile. Default: fill dynamic range <dd>
+<dt> -coherent <dt>
+<dd> coherently add everything, even different wavelengths. Not the default <dd>
+<dt> -accumulate <dt>
+<dd> import contents of floatfile or sinfile/cosfile and add to them. Not the default <dd>
+<dt> -point_pixel <dt>
+<dd> turn off solid-angle correction for square flat pixels <dd>
+<dt> -printout <dt>
+<dd> print pixel values out to the screen <dd>
+<dt> -noprogress <dt>
+<dd> turn off the progress meter <dd>
+</dl>
+
+<br>
+<br>
+</html>

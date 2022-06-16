@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<title>near-field cutoff distance</title>
+</head>
+
+<body>
+
+<h1>near-field cutoff distance</h1>
+<p>
+<h2>or "coherence length" important to diffraction</h2>
+<p>
+The question of "coherence length" has come up from time to time with regard to large
+unit cells of proteins and newer more "coherent" sources.  The coherence length is
+often quoted as the dispersion divided by the wavelength squared, but this is the 
+longitudinal coherence length, not the one that is important for diffraction!
+<p>
+
+Consider Bragg's Law:<p>
+<p><a href=Bragg.png><img border=0 src=Bragg-tmb.png></a><p>
+Bragg assumed what is called the "far field" approximation in that the detector and the
+source are infinitely far away.  This is a fairly good assumption when considering
+two atoms bonded together as the distance between them is about ten orders of magnitude
+smaller than the distance to the source or detector.  However, for atoms in different
+unit cells (particulary unit cells on opposite sides of the crystal) does the
+far field approximation still hold?  What if the atoms are on opposite sides of the
+room?  Clearly, at some point the distance traveled by a wave front from the source
+to the pixel (where the amplitude is actually formed) through one atom vs the other
+will start to deviate from what one expects from Bragg's Law.  In fact, a more
+general geometric construction is this:<p>
+<p><a href=Bragg-ish.png><img border=0 src=Bragg-ish-tmb.png></a><p>
+where we are still just considering the difference in path lengths as Bragg did, but
+no longer assuming that the distance to the source and detector is infinite.  Remember,
+it is not a "photon particle" travling along the arrows above but rather the arrows
+represent the distance (and therefore number of oscillations) taken by a wave front
+(surface of constant phase) passing through space.  The actual amplitude at the
+detector will depend on how all the scattered fronts interfere when they get there.
+
+<p>
+This is an example
+of the age-old question of when to add amplitudes (Fs) as vectors and then square the 
+magnitude of the result to get intensity
+or square the F magnitudes first and then add the intensities:<p>
+I = (F<sub>1</sub><sup>2</sup> + F<sub>2</sub><sup>2</sup>) or (F<sub>1</sub> + F<sub>2</sub>)<sup>2</sup> ?
+<p>
+Another form of this same question is: for a perfect crystal containing N atoms,
+is the spot intensity proportional to N or N<sup>2</sup>?
+<p>The example below addressed both these questions and demonstrates
+where the transition between these two modes of scattering takes place.
+
+
+<hr>
+<h3>general scattering from a line of atoms</h3><p>
+To exemplify the "length scale" in a protein crystal where unit cells
+no longer interfere 
+coherently with each other, I simulated a one-dimensional row of atoms with 
+100 Angstrom spacing, 1 Angstrom wavelength radiation and evaluated the first "Bragg peak" 
+(or layer line really) located 1 mm from the beam center on a detector surface 
+placed 100 mm from the "crystal".<p>
+<p><img src=coherence_length.png><p>
+
+<p>The diagram is not to scale, but one can see how the scattered waves from the
+ends of the crystal must travel further than the waves scattered from the middle
+of the crystal.  Eventually, they will get out of phase.
+<p>  The source is taken to be infinitely far away, 
+but the detector was treated in the "near field"
+in that distance from each atom to the
+ pixel of interest was calculated exactly and the sin<sup>2</sup> and cos<sup>2</sup> added up.
+Although the change in the
+exact distance to a pixel from atom to atom is small when compared to the average
+sample-to-detector distance, it is not small when compared to the wavelength of the
+light.<p>
+
+
+The resulting maximum peak intensity (at the top of the peak) is then:
+<p><img src=linescatter.png><p>
+Here I have not normalized for the number of atoms (N), but rather just plot the sum 
+of the squares of amplitudes from all atoms.  The left hand side is indeed 
+proportional to N<sup>2</sup>, but the "wiggling off" at 300-400 atoms 
+corresponds to the ends of the line of atoms approaching 1.5-2 microns from 
+the origin, which is the point where the atoms at the ends of the "crystal" 
+are ~0.5 A further away from the pixel than the atoms at the center.
+One might expect that the flattening out of this curve for large numbers 
+of atoms would imply that the intensity becomes independent of the number 
+of atoms, and indeed it does!  But this intensity is photons/steradian, 
+and at the 300-400 atom mark, the Bragg peaks start to become wider 
+(due simply to the size of the crystal).  In all cases the integrated 
+intensity of the spot is always proportional to N.
+
+The shapes of some selected peaks are:
+<p><img src=linescatter_peak_movie.gif><p>
+where the legend is the number of atoms in the line and the length of the
+"crystal" in microns.  These curves have 
+all been normalized to the number of atoms to put them all 
+roughly on the same scale: the area under each of these curves is the same.
+
+<p>
+<hr>
+Comments? Suggestions?<p>
+<ADDRESS><A HREF="mailto:JMHolton@lbl.gov">James Holton &lt;JMHolton@lbl.gov&gt;</A></ADDRESS>
+
+</body>
+
+
+<br>
+<br>
+</html>

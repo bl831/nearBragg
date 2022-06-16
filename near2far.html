@@ -1,0 +1,110 @@
+<html>
+
+<head>
+<title>near-field to far-field transition</title>
+</head>
+
+<body>
+
+<h1>near-field to far-field transition</h1>
+<p>
+<h2>or "what does a Fourier transform look like?"</h2>
+<p>
+Many educational videos have tried to come up with some kind of animation to represent
+the Fourier transform.  This is hard to do since there is no obvious mathematical way
+to represent a space that is halfway between "real space" and "reciprocal space".  However,
+in reality there is a continuum of shapes between atoms and diffraction patterns.
+<p>
+
+Consider a theoretical detector with small enough pixels that it could resolve the distance
+between two "point atoms". Now, these "atoms" could be a few Angstrom apart, or they could be 
+several inches apart.  The important thing to diffraction is the ratio of this distance to 
+the wavelength of the light being used.  
+If we ignore the direct beam (and the huge flare it would produce
+on the detector), then we can consider these two atoms to be point emitters of light, and
+if they are both experiencing the "same" incident beam, then their scattering will be "in
+phase".
+
+<p>
+Now, if our theoretical detector is virtually in contact with these two atoms, then
+the image we will record is two distinct points, created by the light being emitted by
+each atom.  The relative phase of the light doesn't matter since the pixels pick it up long
+before they can interact with light from the other atom.  However, if we move the detector
+further away, the light from each atom will start to interfere, and in the limit of infinite
+distance we will see the classic "interference pattern" of light and dark bands with a spacing
+equal to the reciprocal distance between the atoms.  What does the transition between two
+points and a row of bands look like?  See below.
+
+<p>
+The animation below was rendered with 
+<a href="index.html">nearBragg2D</a>.
+The detector is 512x512 pixels and the pixels are 0.1 Angstrom wide, making this a ~5 nm wide detector.
+The wavelength of light being used is 1 Angstrom, and the atoms are 10 Angstrom apart.
+The <font color=green>green</font> text in the upper left corner is the "detector distance" 
+inasmuch as it is the distance between the detector pixel plane and the plane normal to the incident beam
+that contains the two atoms.
+It is expressed in multiples of the distance between the atoms (1 nm).
+The detector size is fixed for all frames in the movie.
+<p>
+
+<p>
+One can see that the two point atoms are clearly resolved in the first frame, but as the detector
+starts to move away (the near field), one can see bow-shaped lines where the sum of the distance from one atom to
+the other atom <i>via</i> the pixel becomes an integral multiple of wavelengths.  This is the
+definition of an interference line.  At this distance, however, the lines are bowed because the
+detector is very close to the atoms, relative to the wavelength of the light.  At longer detector
+distances, the pattern rapidly converges to bands (the far field).  These bands also rapidly begin
+to move apart.  This is because our detector is still only 5 nm wide, but it is the <b>angle</b>
+between the bands that is actually fixed.  In this way, it can be seen that "reciprocal space" is
+really more of an angle space than it is a "reciprocal distance space", although the latter is a
+useful tool in the far field. 
+
+<p>
+<img src=near2far_color.gif><br>
+The colors indicate the phase of the wave arriving at the detector relative to that of
+a single atom located at the origin.<br>
+Also available in 
+<a href=near2far.gif>black and white</a>
+<a href=near2far_color.swf>swf</a>
+<a href=near2far_color.wmv>wmv</a>
+<a href=near2far_color.mov>mov</a>
+<p>
+So, what does it look like with three atoms?  Like this:
+<a href=near2far3.gif>black and white</a>
+or color-by-phase: 
+<a href=near2far3_color.gif>gif</a>
+<a href=near2far3_color.swf>swf</a>
+<a href=near2far3_color.wmv>wmv</a>
+<a href=near2far3_color.mov>mov</a>
+<br>
+Where a third atom has been thrown in at an arbitrary position.
+
+<p>
+What if you "zoom" the pixels to kind of "follow" the far-field pattern? :
+<a href=near2far3_zoom.gif>black and white</a>
+color-by-phase:
+<a href=near2far3_color_zoom.gif>gif</a>
+<a href=near2far3_color_zoom.swf>swf</a>
+<a href=near2far3_color_zoom.wmv>wmv</a>
+<a href=near2far3_color_zoom.mov>mov</a>
+<br>
+This movie is the same as the previous (near2far3), but once the detector has reached a far-field
+distance, I start making the pixels bigger so that the resolution on the edge of the detector is
+fixed depsite the increasing distance.  This effectively changes the pixel coordinates from 
+positions to angles, making it easier to see how the pattern evolves in reciprocal space.
+<p>
+How was these movies made?  With these tcsh shell scripts: 
+<a href=near2far.csh.txt>near2far.csh</a>
+<a href=near2far3.csh.txt>near2far3.csh</a>
+
+
+<hr>
+Comments? Suggestions?<p>
+<ADDRESS><A HREF="mailto:JMHolton@lbl.gov">James Holton &lt;JMHolton@lbl.gov&gt;</A></ADDRESS>
+
+</body>
+
+
+<br>
+<br>
+</html>
