@@ -197,8 +197,8 @@ adxv intimage_round.img
 
 ## Other examples:
 
-1. [Demonstration of Bragg's Law](braggs_law.md)
-2. <a href=collision/>Deminstration of coherence length</a></br>
+1. [Demonstration of Bragg's Law](docs/braggs_law.md)
+2. [Demonstration of coherence length](docs/collision.md)
 
 
 ## Command-line options
