@@ -1,6 +1,6 @@
 # What happens to the diffraction pattern (left) when a mosaic domain (right) splits apart?
 
-![](movie.mov)
+![](movie.gif)
 
 
 Note that at the start of the movie, when the two halves of the mosaic domain
